@@ -1,0 +1,24 @@
+Repo link: https://github.com/Sam-Scott-McMaster/the-team-assignment-team-27
+
+
+Team members names, student IDs and Github IDs:
+
+Arsia Khorramijam, 400521108, arsiakh
+Saqib Khan, 400504486, saqib-21
+Adam Dabees, 400525917, Adam-Dabees
+Aakash Satish, 400503380, aaka05
+
+Initial Idea:File Manager 
+
+Name: File and Data Management Toolkit
+
+Type: Command line, Bash and C
+
+Description:
+Organise - use sorted files to organize them in directories  -- format tag & rename
+Sort - arrange files to be organized based on file type and date created (2) 
+Delete - old files, duplicates 
+Backup function -- every week to cloud storage 
+
+
+
