@@ -93,11 +93,21 @@ organize_by_date() {
 
 organize_recursive() {
     local target_dir="$1"
+    local criteria="$2"
+
     for entry in "$target_dir"/*; do
         if [ -d "$entry" ]; then
-            organize_recursive "$entry"
+            # Recursively call organize_recursive for subdirectories
+            organize_recursive "$entry" "$criteria"
         elif [ -f "$entry" ]; then
-            organize_by_type "$target_dir"
+            # Perform the organization for the current directory
+            case "$criteria" in
+                type) organize_by_type "$target_dir" ;;
+                size) organize_by_size "$target_dir" ;;
+                date) organize_by_date "$target_dir" ;;
+                *) echo "Invalid criteria"; usage ;;
+            esac
+            break
         fi
     done
 }
@@ -114,9 +124,4 @@ if [ -z "$directory" ] || [ -z "$criteria" ]; then
     usage
 fi
 
-case "$criteria" in
-    type) organize_by_type "$directory" ;;
-    size) organize_by_size "$directory" ;;
-    date) organize_by_date "$directory" ;;
-    *) echo "Invalid criteria"; usage ;;
-esac
+organize_recursive "$directory" "$criteria"
