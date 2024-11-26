@@ -2,7 +2,7 @@
 
 if [[ "$1" == "--help" ]]; 
 then
-   echo "Usage"
+   echo "Usage: ./date_delete.sh <directory> <days>"
    exit 0;
 fi
 if [[ $# -ne 2 ]];
