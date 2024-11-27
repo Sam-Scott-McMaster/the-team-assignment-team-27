@@ -32,6 +32,9 @@ second_input=$2
 
 case "$first_input" in
     delete)
+        if [[ $1 == "--help" ]]; then
+        ./date_delete.sh --help
+        fi
         if [[ $# -ne 3 ]]; then
             echo "Usage: $0 delete <directory> <days>"
             exit 1
@@ -39,6 +42,9 @@ case "$first_input" in
         ./date_delete.sh "$second_input" "$3"
         ;;
     encrypt)
+        if [[ $1 == "--help" ]]; then
+        ./file_encryptor.sh --help
+        fi
         if [[ $# -ne 3 ]]; then
             echo "Usage: $0 encrypt <encrypt|decrypt> <filename>"
             exit 1
@@ -46,6 +52,9 @@ case "$first_input" in
         ./file_encryptor.sh "$second_input" "$3"
         ;;
     organize)
+        if [[ $1 == "--help" ]]; then
+        ./organize.sh --help
+        fi
         if [[ $# -ne 3 ]]; then
             echo "Usage: $0 organize <directory> <criteria>"
             exit 1
