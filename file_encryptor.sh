@@ -42,26 +42,30 @@ help() {
 
 
 
-# if the user does not provide two arguments
+# If the user does not provide exactly two arguments
 if [ "$#" -ne 2 ]
     then
-    usage
-fi
-
-
-# first argument = action
-#second argument = the file
-ACTION=$1
-FILE=$2
-
-# If the user does not provide exactly two arguments
-if [ "$#" -ne 2 ]; then
-    if [ "$#" -eq 1 ]; then
+    if [ "$#" -eq 1 ]
+        then
         help  # Call the help function if only one argument is given
     else
         usage  # Call the usage function for invalid argument count
     fi
 fi
+# first argument = action
+#second argument = the file
+ACTION=$1
+FILE=$2
+
+
+# if the file doesn't exists
+if [ ! -f "$FILE" ]
+    then
+    echo "Error: File '$FILE' not found."
+    exit 1
+fi
+
+
 
 
 
