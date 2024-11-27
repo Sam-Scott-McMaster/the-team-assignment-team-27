@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 ###########################
 # Display usage information
 # Globals: None
@@ -12,8 +11,6 @@ usage() {
     echo "Usage: $0 <encrypt|decrypt> <filename>" >&2
     exit 1
     }
-
-
 
 ###########################
 # Display help text
@@ -43,23 +40,29 @@ help() {
 }
 
 
-# if the user does not provice two arguments
+
+
+# if the user does not provide two arguments
 if [ "$#" -ne 2 ]
     then
     usage
 fi
 
-# first argument = action 
-#second argument = the file 
+
+# first argument = action
+#second argument = the file
 ACTION=$1
 FILE=$2
 
-
-# if the file doesn't exists
-if [ ! -f "$FILE" ]; then
-    echo "Error: File '$FILE' not found."
-    exit 1
+# If the user does not provide exactly two arguments
+if [ "$#" -ne 2 ]; then
+    if [ "$#" -eq 1 ]; then
+        help  # Call the help function if only one argument is given
+    else
+        usage  # Call the usage function for invalid argument count
+    fi
 fi
+
 
 
 
@@ -68,30 +71,49 @@ if [ "$ACTION" = "encrypt" ]
     then
     echo "Encrypting file: $FILE"
     openssl enc -aes-256-cbc -salt -in "$FILE" -out "$FILE.enc"
-    if [ $? -eq 0 ] #if command openssl succesfully ran 
+    if [ $? -eq 0 ] #if command openssl succesfully ran
         then
         echo "File successfully encrypted: $FILE.enc" #output file
+        # Delete the original file
+        rm "$FILE"
+        if [ $? -eq 0 ]; then
+            echo "Original file deleted: $FILE, file is fully encrypted"
+        else
+            echo "Error: Could not delete the original file."
+            exit 1
+        fi
     else
         echo "Error: Encryption failed."
         exit 1
     fi
 
+
 # Decrypt the file
 elif [ "$ACTION" = "decrypt" ]
     then
     echo "Decrypting file: $FILE"
-    FILE_DECRYPTED="${FILE%.enc}"
+    FILE_DECRYPTED="${FILE%.enc}" #removes the .enc
     openssl enc -aes-256-cbc -d -in "$FILE" -out "$FILE_DECRYPTED"
-    if [ $? -eq 0 ] #if command openssl succesfully ran 
+    if [ $? -eq 0 ] #if command openssl succesfully ran
         then
         echo "File successfully decrypted: $FILE_DECRYPTED" #output file
+        # Delete the original file
+        rm "$FILE"
+        if [ $? -eq 0 ]; then
+            echo "Encryption file deleted: $FILE, Original file is now restored"
+        else
+            echo "Error: Could not delete the original file."
+            exit 1
+        fi
     else
         echo "Error: Decryption failed. Make sure you entered the correct password."
         exit 1
     fi
+
 
 # Handle invalid actions
 else
     echo "Error: Invalid action '$ACTION'."
     usage
 fi
+
