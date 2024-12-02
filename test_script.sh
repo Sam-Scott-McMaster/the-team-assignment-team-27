@@ -113,7 +113,18 @@ Examples:
 
 test './organize.sh /nonexistent' 1 '' "$expected_usage"
 
+#Script 4: backup.sh and backup2.sh
 
+test './backup.sh --help' 0 '' "Backup Script Help:
+Usage: ./backup.sh <backup folder or -na> <input .txt file> 
+Arguments:
+  <backup folder or -na>: Specify a absolute path to folder for backups or use '-na' to create a default 'BACKUP' folder.
+  <input file>: Absolute path to a text file listing absolute path of folders/files to back up (one per line).
+  <time interval>: Specify backup frequency as:
+    d - daily, w - weekly, m - monthly, or a number (#min) for minutes.
+Example:
+  ./backup.sh -na file_list.txt"
+test './backup2.sh ./BACKUP ./backupFiles.txt' 0 '' 'All files copied successfully. Clearing input file.' ''
 
 # return code
 exit $fails

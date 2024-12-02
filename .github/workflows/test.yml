@@ -10,6 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Prepare Test Environment for backup script
+        run: mkdir BACKUP
+
       - name: Run Tests
         run: ./test_script.sh > test_results.txt
 
