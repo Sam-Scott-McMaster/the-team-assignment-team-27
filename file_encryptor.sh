@@ -71,7 +71,7 @@ check_args() {
     fi
 }
 
-# If the user does not provide exactly two arguments
+# If the user does not give exactly two arguments
 if [ "$#" -ne 2 ]
     then
     if [ "$1" == "--help" ]

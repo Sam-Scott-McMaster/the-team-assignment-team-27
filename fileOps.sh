@@ -54,6 +54,7 @@ usage() {
     echo "      Organizes all files in the specified folder into subfolders by the year and month they were last modified."
     echo ""
     echo "  --help    Displays this help message."
+    echo ""
     exit 1
 }
 
