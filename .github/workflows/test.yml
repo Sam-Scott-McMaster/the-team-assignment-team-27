@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Prepare Test Environment for backup script
-        run: mkdir BACKUP
+        run: mkdir -p BACKUP
 
       - name: Run Tests
         run: ./test_script.sh > test_results.txt
