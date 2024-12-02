@@ -87,7 +87,7 @@ test './date_delete.sh --help' 0 '' 'Usage: ./date_delete.sh <directory> <days>'
 test './date_delete.sh a b c' 1 '' 'Invalid number of arguements' ''
 
 # Script 2: file_encryptor
-test './file_encryptor.sh encrypt nonexistent.txt' 2 '' 'Error: Target '\''nonexistent.txt'\'' not found.'
+test './file_encryptor.sh encrypt nonexistent.txt' 2 '' '' 'Error: Target '\''nonexistent.txt'\'' not found'
 
 #Script 3: organize.sh
 
