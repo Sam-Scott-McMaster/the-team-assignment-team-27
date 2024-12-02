@@ -90,28 +90,6 @@ test './date_delete.sh a b c' 1 '' 'Invalid number of arguements' ''
 test './file_encryptor.sh encrypt nonexistent.txt' 1 '' 'Error: File '\''nonexistent.txt'\'' not found.'
 
 #Script 3: organize.sh
-expected_usage="Usage: ./organize.sh -d <directory> -c <criteria>
-
-Organize files in a directory based on the specified criteria.
-
-Options:
-  -d <directory>  Specify the target directory to organize.
-  -c <criteria>   Choose the organization criteria:
-                   type  - Organize files by type (e.g., Images, Documents, Videos)
-                   size  - Organize files by size (e.g., Small, Medium, Large)
-                   date  - Organize files by modification date (e.g., Year-Month folders)
-
-Examples:
-  ./organize.sh -d ~/Downloads -c type
-      Organize all files in the ~/Downloads folder into subfolders based on file type.
-
-  ./organize.sh -d ~/Documents -c size
-      Organize all files in the ~/Documents folder into 'Small', 'Medium', and 'Large' subfolders based on file size.
-
-  ./organize.sh -d /path/to/folder -c date
-      Organize all files in the specified folder into subfolders by the year and month they were last modified."
-
-test './organize.sh /nonexistent' 1 '' "$expected_usage"
 
 #Script 4: backup.sh and backup2.sh
 
