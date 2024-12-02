@@ -12,7 +12,6 @@
 ###########################
 usage() {
     echo "Usage: $0 <encrypt|decrypt> <filename|folder>" >&2
-    exit 1
 }
 
 ###########################
@@ -78,7 +77,8 @@ if [ "$#" -ne 2 ]
         then
             help  # Call the help function if only one argument is given
     else
-        usage  # Call the usage function for invalid argument count
+        usage
+        exit 1  # Call the usage function for invalid argument count
     fi
 fi
 
