@@ -10,13 +10,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create testing files for duplicate_delete.sh
+        run: |
+          mkdir testing
+          echo "This is a test for duplicate_deleting.sh" > testing/file1.txt
+          echo "This is a test for duplicate_deleting.sh" > testing/file2.txt
+          echo "This is a test for duplicate_deleting.sh" > testing/file3.txt
+
       - name: Run Tests
         run: ./test_script.sh > test_results.txt
 
       - name: Upload Test Results
         if: ${{ always() }}
-
+        
         uses: actions/upload-artifact@v4
         with:
           name: Test Results
           path: ./test_results.txt
+
+      - name: Delete testing files
+        run: |
+          rmdir testing
+

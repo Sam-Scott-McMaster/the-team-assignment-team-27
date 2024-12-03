@@ -86,13 +86,34 @@ test './date_delete.sh --help' 0 '' 'Usage: ./date_delete.sh <directory> <days>'
 
 test './date_delete.sh a b c' 1 '' 'Invalid number of arguements' ''
 
-# Script 2: file_encryptor
+#Script 2: duplicate_delete.sh 
+test './duplicate_delete.sh --help' 0 '' 'Usage: ./duplicate_delete.sh <directory>' ''
+test './duplicate_delete.sh randomDirectory' 1 '' 'Error: randomDirectory does not exist' ''
+
+test './duplicate_delete.sh testing' 0 'n' "Checking for duplicates in testing
+The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
+testing/file2.txt
+testing/file3.txt
+Are you sure you want to proceed? (y/n)
+Operation cancelled. Exiting Program.
+Exited Successfully" ''
+
+test './duplicate_delete.sh testing' 0 'y' "Checking for duplicates in testing
+The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
+testing/file2.txt
+testing/file3.txt
+Are you sure you want to proceed? (y/n)
+removed 'testing/file2.txt'
+removed 'testing/file3.txt'
+Duplicate files deleted. One version of each file was kept." ''
+
+# Script 3: file_encryptor
 test './file_encryptor.sh encrypt nonexistent.txt' 2 '' '' 'Error: Target '\''nonexistent.txt'\'' not found
 Usage: ./file_encryptor.sh <encrypt|decrypt> <filename|folder>'
 
-#Script 3: organize.sh
+#Script 4: organize.sh
 
-#Script 4: backup.sh and backup2.sh
+#Script 5: backup.sh and backup2.sh
 
 test './backup.sh --help' 0 '' "Backup Script Help:
 Usage: ./backup.sh <backup folder or -na> <input .txt file> 
