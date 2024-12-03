@@ -28,7 +28,7 @@ fi
 echo "Checking for duplicates in $DIRECTORY"
 
 #find the duplicates and store them in a file
-find "$DIRECTORY" -type f -exec md5sum {} \; | \
+find "$DIRECTORY" -type f -exec md5 {} \; | \
 
 #format the output to be easier to read
 sed 's/MD5 (\(.*\)) = \(.*\)/\2 \1/' | \
