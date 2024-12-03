@@ -17,6 +17,9 @@ jobs:
           echo "This is a test for duplicate_deleting.sh" > testing/file2.txt
           echo "This is a test for duplicate_deleting.sh" > testing/file3.txt
 
+      - name: Make script executable
+        run: chmod 755 test_script.sh
+
       - name: Run Tests
         run: ./test_script.sh > test_results.txt
 
