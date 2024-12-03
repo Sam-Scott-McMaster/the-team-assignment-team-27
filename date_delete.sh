@@ -14,7 +14,7 @@ fi
 DIRECTORY=$1
 FILE_DATE=$2
 
-if [[ ! -d "DIRECTORY" ]];
+if [[ ! -d "$DIRECTORY" ]];
 then
    echo "Error: $DIRECTORY does not exist"
 fi 
