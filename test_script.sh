@@ -87,8 +87,8 @@ test './date_delete.sh --help' 0 '' 'Usage: ./date_delete.sh <directory> <days>'
 test './date_delete.sh a b c' 1 '' 'Invalid number of arguements' ''
 
 #Script 2: duplicate_delete.sh 
-# test './duplicate_delete.sh --help' 0 '' 'Usage: ./duplicate_delete.sh <directory>' ''
-# test './duplicate_delete.sh randomDirectory' 1 '' 'Error: randomDirectory does not exist' ''
+test './duplicate_delete.sh --help' 0 '' 'Usage: ./duplicate_delete.sh <directory>' ''
+test './duplicate_delete.sh randomDirectory' 1 '' 'Error: randomDirectory does not exist' ''
 
 # # test './duplicate_delete.sh testing' 0 'n' "Checking for duplicates in testing
 # # The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
