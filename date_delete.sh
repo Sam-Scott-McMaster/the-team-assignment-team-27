@@ -17,6 +17,7 @@ FILE_DATE=$2
 if [[ ! -d "$DIRECTORY" ]];
 then
    echo "Error: $DIRECTORY does not exist"
+   exit 1;
 fi 
 
 FILES=$(find "$DIRECTORY" -type f -mtime +$FILE_DATE)
