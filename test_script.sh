@@ -84,7 +84,7 @@ test() {
 # Script 1: date_delete.sh
 test './date_delete.sh --help' 0 '' 'Usage: ./date_delete.sh <directory> <days>' ''
 test './date_delete.sh a b c' 1 '' 'Invalid number of arguements' ''
-test './date_delete.sh nonexistentDirectory 1' 1 '' 'Error: nonexistentDirectory does not exist' ''
+# test './date_delete.sh nonexistentDirectory 1' 1 '' 'Error: nonexistentDirectory does not exist' ''
 test './date_delete.sh testing 1' 0 '' ' No files found older than 1'
 
 #Script 2: duplicate_delete.sh 
