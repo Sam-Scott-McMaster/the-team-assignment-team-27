@@ -100,11 +100,11 @@ Exited Successfully" ''
 
 test './duplicate_delete.sh testing' 0 'y' "Checking for duplicates in testing
 The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
-testing/file2.txt
-testing/file3.txt
+testing/test2.txt
+testing/test3.txt
 Are you sure you want to proceed? (y/n)
-removed 'testing/file2.txt'
-removed 'testing/file3.txt'
+testing/test2.txt
+testing/test3.txt
 Duplicate files deleted. One version of each file was kept." ''
 
 # Script 3: file_encryptor
