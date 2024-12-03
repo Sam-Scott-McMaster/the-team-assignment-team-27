@@ -12,6 +12,7 @@ jobs:
 
       - name: Create testing files for duplicate_delete.sh
         run: |
+          mkdir -p testing
           echo "This is a test for duplicate_deleting.sh" > testing/test1.txt
           echo "This is a test for duplicate_deleting.sh" > testing/test2.txt
           echo "This is a test for duplicate_deleting.sh" > testing/test3.txt
@@ -24,7 +25,6 @@ jobs:
 
       - name: Upload Test Results
         if: ${{ always() }}
-        
         uses: actions/upload-artifact@v4
         with:
           name: Test Results
@@ -32,5 +32,5 @@ jobs:
 
       - name: Delete testing files
         run: |
-          rm testing/test1.txt
-          
+          rm -f testing/test1.txt testing/test2.txt testing/test3.txt
+          rm -rf testing
