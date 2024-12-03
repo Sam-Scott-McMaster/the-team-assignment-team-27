@@ -66,15 +66,28 @@ first_input=$1
 second_input=$2
 
 case "$first_input" in
-    delete)
+    date_delete)
         if [[ $1 == "--help" ]]; then
         ./date_delete.sh --help
         fi
+
         if [[ $# -ne 3 ]]; then
             echo "Usage: $0 delete <directory> <days>"
             exit 1
         fi
+
         ./date_delete.sh "$second_input" "$3"
+        ;;
+    duplicate_delete)
+        if [[ $1 == "--help" ]]; then
+        ./duplicate_delete.sh --help
+        fi
+        
+        if [[ $# -ne 2 ]]; then
+            echo "Usage: $0 duplicate_delete <directory>"
+            exit 1
+        fi
+        ./duplicate_delete.sh "$second_input"
         ;;
     encrypt)
         if [[ $1 == "--help" ]]; then
