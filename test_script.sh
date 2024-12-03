@@ -103,8 +103,8 @@ The following duplicate files are being prepared to be deleted (only the first i
 testing/test2.txt
 testing/test3.txt
 Are you sure you want to proceed? (y/n)
-testing/test2.txt
-testing/test3.txt
+removed 'testing/test2.txt'
+removed 'testing/test3.txt'
 Duplicate files deleted. One version of each file was kept." ''
 
 # Script 3: file_encryptor
