@@ -33,5 +33,5 @@ jobs:
 
       - name: Delete testing files
         run: |
+          rm testing/test1.txt
           rm -rf testing
-
