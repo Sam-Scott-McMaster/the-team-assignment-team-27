@@ -10,6 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Required Tools
+        run: sudo apt-get update && sudo apt-get install -y coreutils
+
       - name: Create testing files for duplicate_delete.sh
         run: |
           mkdir -p testing
@@ -30,7 +33,8 @@ jobs:
           name: Test Results
           path: ./test_results.txt
           
-      - name: Delete testing files
+      - name: Cleanup
+        if: ${{ always() }}
         run: |
-          rm -f testing/test1.txt testing/test2.txt testing/test3.txt
+          rm -f testing/test1.txt testing/test2.txt testing/test3.txt duplicates.txt
           rm -rf testing
