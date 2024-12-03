@@ -36,5 +36,5 @@ jobs:
       - name: Cleanup
         if: ${{ always() }}
         run: |
-          rm -f testing/test1.txt testing/test2.txt testing/test3.txt duplicates.txt
+          rm -f testing/test1.txt duplicates.txt
           rm -rf testing

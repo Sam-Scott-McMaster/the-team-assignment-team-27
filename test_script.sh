@@ -90,22 +90,22 @@ test './date_delete.sh a b c' 1 '' 'Invalid number of arguements' ''
 test './duplicate_delete.sh --help' 0 '' 'Usage: ./duplicate_delete.sh <directory>' ''
 test './duplicate_delete.sh randomDirectory' 1 '' 'Error: randomDirectory does not exist' ''
 
-# # test './duplicate_delete.sh testing' 0 'n' "Checking for duplicates in testing
-# # The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
-# # testing/test2.txt
-# # testing/test3.txt
-# # Are you sure you want to proceed? (y/n)
-# # Operation cancelled. Exiting Program.
-# # Exited Successfully" ''
+# test './duplicate_delete.sh testing' 0 'n' "Checking for duplicates in testing
+# The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
+# testing/test2.txt
+# testing/test3.txt
+# Are you sure you want to proceed? (y/n)
+# Operation cancelled. Exiting Program.
+# Exited Successfully" ''
 
-# # test './duplicate_delete.sh testing' 0 'y' "Checking for duplicates in testing
-# # The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
-# # testing/test2.txt
-# # testing/test3.txt
-# # Are you sure you want to proceed? (y/n)
-# # removed 'testing/test2.txt'
-# # removed 'testing/test3.txt'
-# # Duplicate files deleted. One version of each file was kept." ''
+test './duplicate_delete.sh testing' 0 'y' "Checking for duplicates in testing
+The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
+testing/test2.txt
+testing/test3.txt
+Are you sure you want to proceed? (y/n)
+removed 'testing/test2.txt'
+removed 'testing/test3.txt'
+Duplicate files deleted. One version of each file was kept." ''
 
 # Script 3: file_encryptor
 test './file_encryptor.sh encrypt nonexistent.txt' 2 '' '' 'Error: Target '\''nonexistent.txt'\'' not found
