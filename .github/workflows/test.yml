@@ -13,9 +13,9 @@ jobs:
       - name: Create testing files for duplicate_delete.sh
         run: |
           mkdir testing
-          echo "This is a test for duplicate_deleting.sh" > testing/file1.txt
-          echo "This is a test for duplicate_deleting.sh" > testing/file2.txt
-          echo "This is a test for duplicate_deleting.sh" > testing/file3.txt
+          echo "This is a test for duplicate_deleting.sh" > testing/test1.txt
+          echo "This is a test for duplicate_deleting.sh" > testing/test2.txt
+          echo "This is a test for duplicate_deleting.sh" > testing/test3.txt
 
       - name: Make script executable
         run: chmod 755 test_script.sh
@@ -33,5 +33,6 @@ jobs:
 
       - name: Delete testing files
         run: |
+          rm testing/test1.txt
           rmdir testing
 
