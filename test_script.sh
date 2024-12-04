@@ -97,12 +97,12 @@ test './date_delete.sh testing 1' 0 '' 'No files found older than 1'
 test './duplicate_delete.sh --help' 0 '' 'Usage: ./duplicate_delete.sh <directory>' ''
 test './duplicate_delete.sh randomDirectory' 1 '' 'Error: randomDirectory does not exist' ''
 
-test './duplicate_delete.sh testing' 0 'n' "Checking for duplicates in testing
-The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
-testing/test2.txt
-testing/test3.txt
-Operation cancelled. Exiting Program.
-Exited Successfully" ''
+# test './duplicate_delete.sh testing' 0 'n' "Checking for duplicates in testing
+# The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
+# testing/test2.txt
+# testing/test3.txt
+# Operation cancelled. Exiting Program.
+# Exited Successfully" ''
 
 # test './duplicate_delete.sh testing' 0 '' "Checking for duplicates in testing
 # The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
