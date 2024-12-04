@@ -27,7 +27,9 @@ jobs:
           chmod +x backup2.sh
 
       - name: Run Tests
-        run: ./test_script.sh > test_results.txt
+        run: |
+          touch test_results.txt
+          ./test_script.sh > test_results.txt
 
       - name: Upload BACKUP Directory
         if: ${{ always() }}
