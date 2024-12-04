@@ -2,20 +2,26 @@
 usage() {
     echo "Usage: $0 <command> [options]"
     echo ""
+    echo "For all commands: Usage: ./fileOps.sh <command> [options]"
     echo "A utility script to perform various file operations such as deletion, encryption, and organization."
     echo ""
     echo "Commands:"
-    echo "  delete    Delete files in a directory older than a specified number of days."
+    echo "  date_delete    Delete files in a directory older than a specified number of days."
+    echo "  duplicate_delete    Delete duplicate files in a directory."
     echo "  encrypt   Encrypt or decrypt files using AES-256-CBC with batch processing support."
     echo "  organize  Organize files in a directory based on the specified criteria."
     echo ""
     echo "Options:"
-    echo "  delete:"
-    echo "    Usage: $0 delete <directory> <days>"
+    echo "  date_delete:"
+    echo "    Usage: $0 date_delete <directory> <days>"
     echo "    Deletes files in the specified directory that are older than the specified number of days."
     echo "    Example:"
-    echo "      $0 delete ~/Downloads 30"
-    echo "      Deletes files older than 30 days from the ~/Downloads directory."
+    echo "      $0 date_delete ~/Downloads 10"
+    echo "      Deletes files older than 10 days from the ~/Downloads directory."
+    echo ""
+    echo "  duplicate_delete:"
+    echo "    Usage: $0 duplicate_delete <directory>"
+    echo "    Deletes duplicate files in the specified directory."
     echo ""
     echo "  encrypt:"
     echo "    Usage: $0 encrypt <encrypt|decrypt> <filename|directory>"
@@ -114,4 +120,3 @@ case "$first_input" in
         usage
         ;;
 esac
-
