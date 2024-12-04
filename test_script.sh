@@ -52,7 +52,7 @@ test() {
     fi
 
     # CHECK STDOUT
-    local A_STDOUT=$($COMMAND <<< "$STDIN" 2>/dev/null)
+    local A_STDOUT=$(echo "$STDIN" | $COMMAND 2>/dev/null)
 
     if [[ "$STDOUT" != "$A_STDOUT" ]]; then
         echo "Test $tc Failed"
@@ -62,9 +62,9 @@ test() {
         fails=$fails+1
         return 2
     fi
-    
-    # CHECK STDERR
-    local A_STDERR=$($COMMAND <<< "$STDIN" 2>&1 >/dev/null)
+
+# CHECK STDERR
+    local A_STDERR=$(echo "$STDIN" | $COMMAND 2>&1 >/dev/null)
 
     if [[ "$STDERR" != "$A_STDERR" ]]; then
         echo "Test $tc Failed"
@@ -91,21 +91,21 @@ test './date_delete.sh testing 1' 0 '' 'No files found older than 1'
 test './duplicate_delete.sh --help' 0 '' 'Usage: ./duplicate_delete.sh <directory>' ''
 test './duplicate_delete.sh randomDirectory' 1 '' 'Error: randomDirectory does not exist' ''
 
-# test './duplicate_delete.sh testing' 0 'n' "Checking for duplicates in testing
-# The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
-# testing/test2.txt
-# testing/test3.txt
-# Are you sure you want to proceed? (y/n)
-# Operation cancelled. Exiting Program.
-# Exited Successfully" ''
+test './duplicate_delete.sh testing' 0 'n' "Checking for duplicates in testing
+The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
+testing/test2.txt
+testing/test3.txt
+Are you sure you want to proceed? (y/n)
+Operation cancelled. Exiting Program.
+Exited Successfully" ''
 
-# test './duplicate_delete.sh testing' 0 '' "Checking for duplicates in testing
-# The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
-# testing/test2.txt
-# testing/test3.txt
-# Are you sure you want to proceed? (y/n)
-# Operation cancelled. Exiting Program.
-# Exited Successfully" ''
+test './duplicate_delete.sh testing' 0 '' "Checking for duplicates in testing
+The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
+testing/test2.txt
+testing/test3.txt
+Are you sure you want to proceed? (y/n)
+Operation cancelled. Exiting Program.
+Exited Successfully" ''
 
 # Script 3: file_encryptor
 test './file_encryptor.sh encrypt nonexistent.txt' 2 '' '' 'Error: Target '\''nonexistent.txt'\'' not found
