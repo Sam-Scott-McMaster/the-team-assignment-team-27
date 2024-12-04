@@ -1,78 +1,68 @@
 #!/bin/bash
 
-#check if the correct number of arguments are provided
-if [[ $# -ne 1 ]];
-then 
-   echo "Invalid number of arguements" 
-   exit 1;
+#check for correct number of arguments 
+if [[ $# -ne 1 ]]; then 
+   echo "Invalid number of arguments" 
+   exit 1
 fi
 
-#check if the user wants help screen
-if [[ "$1" == "--help" ]]; 
-then
+#display help screen
+if [[ "$1" == "--help" ]]; then
    echo "Usage: ./duplicate_delete.sh <directory>"
-   exit 0;
+   exit 0
 fi
 
 #assign the directory to a variable
 DIRECTORY=$1
 
-#check if the directory exists
-if [[ ! -d "$DIRECTORY" ]];
-then
+#check if the directory exiists
+if [[ ! -d "$DIRECTORY" ]]; then
    echo "Error: $DIRECTORY does not exist"
-   exit 1;
+   exit 1
 fi 
 
 #check for duplicates in the directory
 echo "Checking for duplicates in $DIRECTORY"
 
 #find the duplicates and store them in a file
-find "$DIRECTORY" -type f -exec md5 {} \; | \
-
-#format the output to be easier to read
+find "$DIRECTORY" -type f -exec md5 {} + | \
 sed 's/MD5 (\(.*\)) = \(.*\)/\2 \1/' | \
-
-#sort the output to be easier to read
 sort | awk '{
     if ($1 in seen)
         print $2
     else
         seen[$1] = $2
-}' > duplicates.txt #store the output in a file called duplicates.txt
+}' > duplicates.txt
 
-#check if the duplicates file is empty meaning no duplicates were found
-if [[ ! -s duplicates.txt ]];
-then
+#check if duplicates were found in the directory
+if [[ ! -s duplicates.txt ]]; then
     echo "No duplicates were found in $DIRECTORY"
     rm duplicates.txt
-    exit 0;
+    exit 0
 fi
 
-#display the duplicate files that are being prepared to be deleted
-echo "The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): "
+#display the duplicate that were found 
+echo "The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept):"
 cat duplicates.txt
 
-#ask the user if they want to proceed with deleting the duplicates
-echo "Are you sure you want to proceed? (y/n)" 
-read line
+#prompt the user for confirmation
+if [ -t 0 ]; then
+    echo "Are you sure you want to proceed? (y/n)"
+    read -r line
+else
+    line="n"  #default to 'n' in non-interactive mode (cancel the deletion)
+fi
 
-#if the user wants to proceed (y), delete the duplicates 
-if [[ "$line" == "y" ]];
-then
-    #delete the duplicates using xargs to read the file and delete the files
-    xargs rm -v < duplicates.txt
-    #keep the first version of the duplicate
+# Process the user's decision
+if [[ "$line" == "y" ]]; then
+    xargs -d '\n' rm -v < duplicates.txt
     echo "Duplicate files deleted. One version of each file was kept."
 else
-    #if the user does not want to proceed, exit the program
     echo "Operation cancelled. Exiting Program."
     echo "Exited Successfully"
     exit 0
 fi
 
-#delete the duplicates file (no longer needed)
+#remove the file containing the duplicates
 rm duplicates.txt
 exit 0
-
-

@@ -1,6 +1,6 @@
-name: the-team-assignment-team-27 file organizer 
+name: the-team-assignment-team-27 file organizer
 
-on:                                                     
+on:
   push:
     branches: [ "main" ]
 
@@ -13,40 +13,44 @@ jobs:
       - name: Install Required Tools
         run: sudo apt-get update && sudo apt-get install -y coreutils
 
-      - name: Create testing files for duplicate_delete.sh
+      - name: Create testing files
         run: |
           mkdir -p testing
           echo "This is a test for duplicate_deleting.sh" > testing/test1.txt
           echo "This is a test for duplicate_deleting.sh" > testing/test2.txt
           echo "This is a test for duplicate_deleting.sh" > testing/test3.txt
-          echo "preliminaryPlanning.txt" > ./backupFiles.txt
 
-      - name: Make script executable
+      - name: Make scripts executable
         run: |
-          chmod 755 test_script.sh
+          chmod +x test_script.sh
           chmod +x backup2.sh
+          chmod +x duplicate_delete.sh
 
       - name: Run Tests
         run: |
           touch test_results.txt
           ./test_script.sh > test_results.txt
 
+      - name: Display Test Results
+        if: failure()
+        run: cat test_results.txt
+
       - name: Upload BACKUP Directory
-        if: ${{ always() }}
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: BACKUP
           path: ./BACKUP
       
       - name: Upload Test Results
-        if: ${{ always() }}
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Test Results
           path: ./test_results.txt
-          
+
       - name: Cleanup
-        if: ${{ always() }}
+        if: always()
         run: |
-          rm -f testing/test1.txt duplicates.txt
+          rm -f testing/test1.txt testing/test2.txt testing/test3.txt
           rm -rf testing

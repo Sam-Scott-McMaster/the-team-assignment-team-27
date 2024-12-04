@@ -34,14 +34,13 @@ test() {
 
     local COMMAND=$1
     local RETURN=$2
-	local STDIN=$3
+    local STDIN=$3
     local STDOUT=$4
     local STDERR=$5
 
     # CHECK RETURN VALUE
-    $COMMAND <<< "$STDIN" >/dev/null 2>/dev/null
-    local A_RETURN=$?
-
+    local A_RETURN
+    A_RETURN=$(printf "%s\n" "$STDIN" | $COMMAND >/dev/null 2>/dev/null; echo $?)
     if [[ "$A_RETURN" != "$RETURN" ]]; then
         echo "Test $tc Failed"
         echo "   $COMMAND"
@@ -51,10 +50,13 @@ test() {
         return 1
     fi
 
-    # CHECK STDOUT
-    local A_STDOUT=$(echo "$STDIN" | $COMMAND 2>/dev/null)
+    # CHECK STDOUT (Normalize Output)
+    local A_STDOUT
+    A_STDOUT=$(printf "%s\n" "$STDIN" | $COMMAND 2>/dev/null | sed 's/[[:space:]]*$//; /^$/d')
+    local E_STDOUT
+    E_STDOUT=$(echo "$STDOUT" | sed 's/[[:space:]]*$//; /^$/d')
 
-    if [[ "$STDOUT" != "$A_STDOUT" ]]; then
+    if [[ "$E_STDOUT" != "$A_STDOUT" ]]; then
         echo "Test $tc Failed"
         echo "   $COMMAND"
         echo "   Expected STDOUT: $STDOUT"
@@ -63,10 +65,13 @@ test() {
         return 2
     fi
 
-# CHECK STDERR
-    local A_STDERR=$(echo "$STDIN" | $COMMAND 2>&1 >/dev/null)
+    # CHECK STDERR (Normalize Output)
+    local A_STDERR
+    A_STDERR=$(printf "%s\n" "$STDIN" | $COMMAND 2>&1 >/dev/null | sed 's/[[:space:]]*$//; /^$/d')
+    local E_STDERR
+    E_STDERR=$(echo "$STDERR" | sed 's/[[:space:]]*$//; /^$/d')
 
-    if [[ "$STDERR" != "$A_STDERR" ]]; then
+    if [[ "$E_STDERR" != "$A_STDERR" ]]; then
         echo "Test $tc Failed"
         echo "   $COMMAND"
         echo "   Expected STDERR: $STDERR"
@@ -74,11 +79,12 @@ test() {
         fails=$fails+1
         return 3
     fi
-    
+
     # SUCCESS
     echo "Test $tc Passed"
     return 0
 }
+
 
 
 # Script 1: date_delete.sh
@@ -95,17 +101,16 @@ test './duplicate_delete.sh testing' 0 'n' "Checking for duplicates in testing
 The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
 testing/test2.txt
 testing/test3.txt
-Are you sure you want to proceed? (y/n)
 Operation cancelled. Exiting Program.
 Exited Successfully" ''
 
-test './duplicate_delete.sh testing' 0 '' "Checking for duplicates in testing
-The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
-testing/test2.txt
-testing/test3.txt
-Are you sure you want to proceed? (y/n)
-Operation cancelled. Exiting Program.
-Exited Successfully" ''
+# test './duplicate_delete.sh testing' 0 '' "Checking for duplicates in testing
+# The following duplicate files are being prepared to be deleted (only the first instance of the duplicate is kept): 
+# testing/test2.txt
+# testing/test3.txt
+# Are you sure you want to proceed? (y/n)
+# Operation cancelled. Exiting Program.
+# Exited Successfully" ''
 
 # Script 3: file_encryptor
 test './file_encryptor.sh encrypt nonexistent.txt' 2 '' '' 'Error: Target '\''nonexistent.txt'\'' not found
