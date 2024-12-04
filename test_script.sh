@@ -127,4 +127,10 @@ Example:
 test './backup2.sh ./BACKUP ./backupFiles.txt' 0 '' 'All files copied successfully. Clearing input file.' ''
 
 # return code
-exit $fails
+if [[ $fails -eq 0 ]]; then
+    echo "All tests passed!"
+    exit 0
+else
+    echo "$fails tests failed."
+    exit $fails
+fi
