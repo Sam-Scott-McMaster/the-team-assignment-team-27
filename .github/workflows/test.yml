@@ -29,6 +29,13 @@ jobs:
       - name: Run Tests
         run: ./test_script.sh > test_results.txt
 
+      - name: Upload BACKUP Directory
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: BACKUP
+          path: ./BACKUP
+      
       - name: Upload Test Results
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
