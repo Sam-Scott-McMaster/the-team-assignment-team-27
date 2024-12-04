@@ -22,8 +22,9 @@ jobs:
           echo "preliminaryPlanning.txt" > ./backupFiles.txt
 
       - name: Make script executable
-        run: chmod 755 test_script.sh
-        run: chmod +x backup2.sh
+        run: |
+          chmod 755 test_script.sh
+          chmod +x backup2.sh
 
       - name: Run Tests
         run: ./test_script.sh > test_results.txt
