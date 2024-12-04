@@ -19,9 +19,11 @@ jobs:
           echo "This is a test for duplicate_deleting.sh" > testing/test1.txt
           echo "This is a test for duplicate_deleting.sh" > testing/test2.txt
           echo "This is a test for duplicate_deleting.sh" > testing/test3.txt
+          echo "preliminaryPlanning.txt" > ./backupFiles.txt
 
       - name: Make script executable
         run: chmod 755 test_script.sh
+        run: chmod +x backup2.sh
 
       - name: Run Tests
         run: ./test_script.sh > test_results.txt
