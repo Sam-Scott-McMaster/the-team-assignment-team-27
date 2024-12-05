@@ -91,9 +91,9 @@ ACTION=$1
 TARGET=$2
 
 # Prompt for password
-read -s -p "Enter password: " PASSWORD
+read -s -p "Enter password:" PASSWORD  
 echo
-read -s -p "Confirm password: " CONFIRM_PASSWORD
+read -s -p "Confirm password:" CONFIRM_PASSWORD 
 echo
 if [ "$PASSWORD" != "$CONFIRM_PASSWORD" ]
     then
@@ -111,24 +111,20 @@ fi
 encrypt_file() {
     local file="$1"
     echo "Encrypting file: $file"
-    openssl enc -aes-256-cbc -salt -in "$file" -out "$file.enc" -pass pass:"$PASSWORD"
-    if [ $? -eq 0 ] #if command openssl successfully ran
-        then
-            echo "File successfully encrypted: $file.enc" #output file
-            # Delete the original file
-            rm "$file"
-        if [ $? -eq 0 ] #if command rm successfully ran
-            then
-                echo "Original file deleted: $file"
-        else
-            echo "Error: Could not delete the original file." >&2
+    openssl enc -aes-256-cbc -pbkdf2 -salt -in "$file" -out "$file.enc" -pass pass:"$PASSWORD"
+    local openssl_return=$?
+    if [ $openssl_return -eq 0 ]; then
+        echo "File successfully encrypted: $file.enc"
+        rm "$file" || {
+            echo "Error: Could not delete the original file: $file"
             exit 1
-        fi
+        }
     else
-        echo "Error: Encryption failed for $file." >&2
+        echo "Error: Encryption failed for $file (Return Code: $openssl_return)."
         exit 1
     fi
 }
+
 
 ###########################
 # Decrypt a single file
@@ -141,7 +137,7 @@ decrypt_file() {
     local file="$1"
     local decrypted_file="${file%.enc}" #removes the .enc
     echo "Decrypting file: $file"
-    openssl enc -aes-256-cbc -d -in "$file" -out "$decrypted_file" -pass pass:"$PASSWORD"
+    openssl enc -aes-256-cbc -d -pbkdf2 -in "$file" -out "$decrypted_file" -pass pass:"$PASSWORD"
     if [ $? -eq 0 ] #if command openssl successfully ran
         then
             echo "File successfully decrypted: $decrypted_file"
@@ -193,3 +189,5 @@ else
             decrypt_file "$TARGET"
     fi
 fi
+
+exit 0

@@ -34,7 +34,7 @@ test() {
 
     local COMMAND=$1
     local RETURN=$2
-    local STDIN=$3
+	local STDIN=$3
     local STDOUT=$4
     local STDERR=$5
 
@@ -64,7 +64,7 @@ test() {
         fails=$fails+1
         return 2
     fi
-
+    
     # CHECK STDERR (Normalize Output)
     local A_STDERR
     A_STDERR=$(printf "%s\n" "$STDIN" | $COMMAND 2>&1 >/dev/null | sed 's/[[:space:]]*$//; /^$/d')
@@ -79,7 +79,7 @@ test() {
         fails=$fails+1
         return 3
     fi
-
+    
     # SUCCESS
     echo "Test $tc Passed"
     return 0
@@ -113,8 +113,42 @@ test './duplicate_delete.sh randomDirectory' 1 '' 'Error: randomDirectory does n
 # Exited Successfully" ''
 
 # Script 3: file_encryptor
-test './file_encryptor.sh encrypt nonexistent.txt' 2 '' '' 'Error: Target '\''nonexistent.txt'\'' not found
-Usage: ./file_encryptor.sh <encrypt|decrypt> <filename|folder>'
+# Test 1: Display help text
+test './file_encryptor.sh --help' 0 '' \
+    "Encryption Utility
+Encrypts or decrypts files using AES-256-CBC encryption via OpenSSL.
+
+Usage:
+./file_encryptor.sh <encrypt|decrypt> <filename|folder>
+
+Arguments:
+  encrypt   Encrypt a file or all files in a folder.
+  decrypt   Decrypt a file or all files in a folder ending in .enc.
+
+Examples:
+  ./file_encryptor.sh encrypt document.txt
+  ./file_encryptor.sh decrypt document.txt.enc
+  ./file_encryptor.sh encrypt myfolder
+  ./file_encryptor.sh decrypt myfolder
+
+Note: Password is entered once for batch encryption or decryption." ''
+
+# Test 2: Invalid action
+test './file_encryptor.sh invalid file.txt' 2 '' '' \
+    "Error: Invalid action 'invalid'. Must be 'encrypt' or 'decrypt'.
+Usage: ./file_encryptor.sh <encrypt|decrypt> <filename|folder>"
+
+# Test 3: Non-existent file
+test './file_encryptor.sh encrypt nonexistent.txt' 2 '' '' \
+    "Error: Target 'nonexistent.txt' not found
+Usage: ./file_encryptor.sh <encrypt|decrypt> <filename|folder>"
+
+# Test 4: Encrypt a valid file
+echo "Test file content" > testfile.txt
+test './file_encryptor.sh encrypt testfile.txt' 0 'password\npassword\n' \
+    "Encrypting file: testfile.txt
+File successfully encrypted: testfile.txt.enc
+Original file deleted: testfile.txt" ''
 
 #Script 4: organize.sh
 
@@ -137,5 +171,5 @@ if [[ $fails -eq 0 ]]; then
     exit 0
 else
     echo "$fails tests failed."
-    exit $fails
+exit $fails
 fi
