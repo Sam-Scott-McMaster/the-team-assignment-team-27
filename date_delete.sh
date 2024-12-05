@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This utility deletes files in a specific directory that are older than a specified number of days.
-# Aakash Satish, McMaster University
+# Aakash Satish, McMaster University, 400503380
 
 
 #help screen
