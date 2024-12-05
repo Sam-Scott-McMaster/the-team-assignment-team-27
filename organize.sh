@@ -68,22 +68,6 @@ help() {
     exit 0  # Ensure successful exit
 }
 
-# Parse options and arguments
-while getopts "d:c:r" opt; do
-    case "$opt" in
-        d) directory="$OPTARG" ;;  # Store directory argument
-        c) criteria="$OPTARG" ;;   # Store criteria argument
-        r) restore=1 ;;            # Set restore flag
-        *) usage ;;
-    esac
-done
-
-# Validate arguments for restore mode
-if [ "$restore" == "1" ] && [ -z "$directory" ]; then
-    echo "Error: Directory must be specified with -d when using -r."
-    usage
-fi
-
 ###########################
 # Organize files by type
 # Globals: None
@@ -160,13 +144,14 @@ restore_files() {
         current_path=$(find "$directory" -name "$file_name" 2>/dev/null | head -n 1)
 
         if [ -n "$current_path" ]; then
+            echo "Restoring '$current_path' to '$original_path'"
             mv "$current_path" "$original_path"
         else
             echo "Warning: File '$file_name' not found in '$directory'. Skipping."
         fi
     done < "$LOG_FILE"
 
-    echo "Extracting complete. Removing organizational directories..."
+    echo "Extraction complete. Removing organizational directories..."
     rm -rf "$directory/Images" "$directory/Documents" "$directory/Code" "$directory/Other"
     rm -rf "$directory/Small" "$directory/Medium" "$directory/Large"
     find "$directory" -type d -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]" -exec rm -rf {} +
@@ -227,6 +212,7 @@ organize_by_date() {
 # Arguments:
 #   $1 - Target directory
 #   $2 - Organization criteria (type, size, date)
+#   $3 - Is initial boolean 
 # Outputs:
 #   Organizes files in the directory and its subdirectories
 #   Skips already organized folders to avoid reprocessing
@@ -235,8 +221,12 @@ organize_by_date() {
 organize_recursive() {
     local target_dir="$1"
     local criteria="$2"
+    local is_initial="$3"  # Flag to indicate initial call
 
-    echo "Organizing files in $target_dir..."
+    # Print the message only for the initial directory
+    if [ "$is_initial" == "true" ]; then
+        echo "Organizing files in $target_dir..."
+    fi
 
     # Call the appropriate organization function for the current directory
     case "$criteria" in
@@ -266,22 +256,40 @@ organize_recursive() {
                     fi
                     ;;
             esac
-            organize_recursive "$entry" "$criteria"
+            organize_recursive "$entry" "$criteria" false
         fi
     done
 
     # Display success message once per directory
-    case "$criteria" in
-        type) echo "Files have been organized by type." ;;
-        size) echo "Files have been organized by size." ;;
-        date) echo "Files have been organized by modification date." ;;
-    esac
+    if [ "$is_initial" == "true" ]; then
+        case "$criteria" in
+            type) echo "Files have been organized by type." ;;
+            size) echo "Files have been organized by size." ;;
+            date) echo "Files have been organized by modification date." ;;
+        esac
+    fi
 }
 
 # Check if the user requested help
 if [[ "$1" == "--help" ]]; then
     help
     exit 0
+fi
+
+# Parse options and arguments
+while getopts "d:c:r" opt; do
+    case "$opt" in
+        d) directory="$OPTARG" ;;  # Store directory argument
+        c) criteria="$OPTARG" ;;   # Store criteria argument
+        r) restore=1 ;;            # Set restore flag
+        *) usage ;;
+    esac
+done
+
+# Validate arguments for restore mode
+if [ "$restore" == "1" ] && [ -z "$directory" ]; then
+    echo "Error: Directory must be specified with -d when using -r."
+    usage
 fi
 
 # Ensure mandatory arguments are provided
@@ -308,11 +316,6 @@ if [ "$restore" == "1" ]; then
     exit 0
 fi
 
-# Ensure mandatory arguments are provided
-if [ -z "$directory" ] || [ -z "$criteria" ]; then
-    usage
-fi
-
 # Backup metadata and start the recursive organization
 backup_metadata "$directory"
-organize_recursive "$directory" "$criteria"
+organize_recursive "$directory" "$criteria" true
