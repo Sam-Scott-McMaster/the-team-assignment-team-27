@@ -64,7 +64,6 @@ help() {
     echo "  - The restore feature requires that a restore log ($LOG_FILE) exists and contains valid paths."
     echo "  - The specified directory must be the same as the one used during the organization step."
     echo ""
-    exit 0
 }
 
 # Parse options and arguments

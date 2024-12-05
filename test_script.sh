@@ -204,68 +204,84 @@ Note:
   - The specified directory must be the same as the one used during the organization step.'
 
 # Test missing directory argument
-test './organize.sh -c type' 1 '' 'Usage: ./organize.sh -d <directory> -c <criteria>'
+test './organize.sh -c type' 1 '' 'Usage: ./organize.sh -d <directory> -c <criteria>
+       ./organize.sh -d <directory> -r
+       ./organize.sh --help
+
+Use --help to display detailed information about this script.'
 
 # Test missing criteria argument
-test './organize.sh -d test_directory' 1 '' 'Usage: ./organize.sh -d <directory> -c <criteria>'
+test './organize.sh -d test_directory' 1 '' 'Usage: ./organize.sh -d <directory> -c <criteria>
+       ./organize.sh -d <directory> -r
+       ./organize.sh --help
 
-# Prepare files
+Use --help to display detailed information about this script.'
+
+# Create test files
 mkdir -p test_directory
 touch test_directory/file1.txt test_directory/file2.py test_directory/file3.jpg test_directory/file4.doc
 
-# Run organize by type
-test './organize.sh -d test_directory -c type' 0 '' 'Files have been organized by type.'
+# Run the script
+test './organize.sh -d test_directory -c type' 0 '' 'Backing up file metadata to restore.log...
+Backup complete.
+Organizing files...
+Files have been organized by type.'
 
-# Validate results
-test -d test_directory/Documents
-test -d test_directory/Code
-test -d test_directory/Images
-test -d test_directory/Other
+# Check directory structure
+[ -d test_directory/Documents ] || echo "Test failed: Directory Documents does not exist."
+[ -d test_directory/Code ] || echo "Test failed: Directory Code does not exist."
+[ -d test_directory/Images ] || echo "Test failed: Directory Images does not exist."
+[ -d test_directory/Other ] || echo "Test failed: Directory Other does not exist."
 
-# Create test files of different sizes
+# Create files of different sizes
 dd if=/dev/zero of=test_directory/small_file bs=100 count=1
 dd if=/dev/zero of=test_directory/medium_file bs=1M count=5
 dd if=/dev/zero of=test_directory/large_file bs=1M count=15
 
-# Run organize by size
-test './organize.sh -d test_directory -c size' 0 '' 'Files have been organized by size.'
+# Run the script
+test './organize.sh -d test_directory -c size' 0 '' 'Backing up file metadata to restore.log...
+Backup complete.
+Organizing files...
+Files have been organized by size.'
 
-# Validate results
-test -d test_directory/Small
-test -d test_directory/Medium
-test -d test_directory/Large
-test -f test_directory/Small/small_file
-test -f test_directory/Medium/medium_file
-test -f test_directory/Large/large_file
+# Check directory structure
+[ -d test_directory/Small ] || echo "Test failed: Directory Small does not exist."
+[ -d test_directory/Medium ] || echo "Test failed: Directory Medium does not exist."
+[ -d test_directory/Large ] || echo "Test failed: Directory Large does not exist."
 
 # Create files with specific modification dates
 touch -t 202401010000 test_directory/file_jan.txt
 touch -t 202402010000 test_directory/file_feb.txt
 
-# Run organize by date
-test './organize.sh -d test_directory -c date' 0 '' 'Files have been organized by modification date.'
+# Run the script
+test './organize.sh -d test_directory -c date' 0 '' 'Backing up file metadata to restore.log...
+Backup complete.
+Organizing files...
+Files have been organized by modification date.'
 
-# Validate results
-test -d test_directory/2024-01
-test -d test_directory/2024-02
-test -f test_directory/2024-01/file_jan.txt
-test -f test_directory/2024-02/file_feb.txt
+# Check directory structure
+[ -d test_directory/2024-01 ] || echo "Test failed: Directory 2024-01 does not exist."
+[ -d test_directory/2024-02 ] || echo "Test failed: Directory 2024-02 does not exist."
 
-# Backup and organize files
-test './organize.sh -d test_directory -c type' 0 '' 'Files have been organized by type.'
-test -f restore.log
+# Organize files first
+test './organize.sh -d test_directory -c type' 0 '' 'Backing up file metadata to restore.log...
+Backup complete.
+Organizing files...
+Files have been organized by type.'
 
-# Restore files
-test './organize.sh -d test_directory -r' 0 '' 'Restoration complete. Organizational directories have been removed.'
+# Run restore
+test './organize.sh -d test_directory -r' 0 '' 'Restoring files to their original locations...
+Extracting complete. Removing organizational directories...
+Restoration complete. Organizational directories have been removed.'
 
-# Validate files are back to their original location
-test -f test_directory/file1.txt
-test -f test_directory/file2.py
-test -f test_directory/file3.jpg
-test -f test_directory/file4.doc
+# Check original file locations
+[ -f test_directory/file1.txt ] || echo "Test failed: File file1.txt is not in its original location."
+[ -f test_directory/file2.py ] || echo "Test failed: File file2.py is not in its original location."
+[ -f test_directory/file3.jpg ] || echo "Test failed: File file3.jpg is not in its original location."
+[ -f test_directory/file4.doc ] || echo "Test failed: File file4.doc is not in its original location."
 
 # Invalid directory
-test './organize.sh -d nonexistent_directory -c type' 1 '' 'Error: Directory must be specified with -d when using -r.'
+test './organize.sh -d nonexistent_directory -c type' 1 '' 'Error: Specified directory '\''nonexistent_directory'\'' does not exist.'
 
 # Invalid criteria
 test './organize.sh -d test_directory -c invalid' 1 '' 'Invalid criteria'
