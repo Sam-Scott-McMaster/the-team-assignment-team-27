@@ -143,6 +143,18 @@ test './file_encryptor.sh encrypt nonexistent.txt' 2 '' '' \
     "Error: Target 'nonexistent.txt' not found
 Usage: ./file_encryptor.sh <encrypt|decrypt> <filename|folder>"
 
+
+# Test 4: Missing arguments (exit 1)
+test './file_encryptor.sh' 1 '' '' 'Usage: ./file_encryptor.sh <encrypt|decrypt> <filename|folder>'
+
+
+touch testfile.txt
+
+
+# Test Case 5: Passwords do not match
+test './file_encryptor.sh encrypt testfile.txt' 1 $'password1\npassword2\n' ' ' \
+    $'Error: Passwords do not match.'
+
 #touch testfile.txt
 
 # Test 4: Encrypt a valid file
