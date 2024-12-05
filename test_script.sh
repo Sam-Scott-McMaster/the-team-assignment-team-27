@@ -314,10 +314,8 @@ rm -rf test_directory restore.log
 # Invalid directory
 test './organize.sh -d nonexistent_directory -c type' 1 '' 'Error: Specified directory '\''nonexistent_directory'\'' does not exist.'
 
-# Cleanup after the test
-rm -rf test_directory restore.log
-
 # Invalid criteria
+mkdir -p test_directory
 test './organize.sh -d test_directory -c invalid' 1 '' 'Error: Invalid criteria '\''invalid'\''.
 Valid criteria are: type, size, date.'
 
