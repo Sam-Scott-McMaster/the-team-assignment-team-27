@@ -58,6 +58,15 @@ usage() {
     echo ""
     echo "      $0 organize /path/to/folder date"
     echo "      Organizes all files in the specified folder into subfolders by the year and month they were last modified."
+    echo "Backup Script Help:"
+    echo "Usage: ./backup.sh <backup folder or -na> <input .txt file> "
+    echo "Arguments:"
+    echo "  <backup folder or -na>: Specify a absolute path to folder for backups or use '-na' to create a default 'BACKUP' folder."
+    echo "  <input file>: Absolute path to a text file listing absolute path of folders/files to back up (one per line)."
+    echo "  <time interval>: Specify backup frequency as:"
+    echo "    d - daily, w - weekly, m - monthly, or a number (#min) for minutes."
+    echo "Example:"
+    echo "  ./backup.sh -na file_list.txt"
     echo ""
     echo "  --help    Displays this help message."
     echo ""
@@ -73,7 +82,7 @@ second_input=$2
 
 case "$first_input" in
     date_delete)
-        if [[ $1 == "--help" ]]; then
+        if [[ $2 == "--help" ]]; then
         ./date_delete.sh --help
         fi
 
@@ -85,7 +94,7 @@ case "$first_input" in
         ./date_delete.sh "$second_input" "$3"
         ;;
     duplicate_delete)
-        if [[ $1 == "--help" ]]; then
+        if [[ $2 == "--help" ]]; then
         ./duplicate_delete.sh --help
         fi
         
@@ -96,7 +105,7 @@ case "$first_input" in
         ./duplicate_delete.sh "$second_input"
         ;;
     encrypt)
-        if [[ $1 == "--help" ]]; then
+        if [[ $2 == "--help" ]]; then
         ./file_encryptor.sh --help
         fi
         if [[ $# -ne 3 ]]; then
@@ -106,17 +115,17 @@ case "$first_input" in
         ./file_encryptor.sh "$second_input" "$3"
         ;;
     organize)
-        if [[ $1 == "--help" ]]; then
+        if [[ $2 == "--help" ]]; then
         ./organize.sh --help
         fi
         if [[ $# -ne 3 ]]; then
             echo "Usage: $0 organize <directory> <criteria>"
             exit 1
         fi
-        ./organize.sh -d "$second_input" -c "$3"
+        ./organize.sh -d "$second_input" -c "$3" 
         ;;
     backup)
-        if [[ $1 == "--help" ]]; then
+        if [[ $2 == "--help" ]]; then
         ./backup.sh --help
         fi
         if [[ $# -ne 3 ]]; then
