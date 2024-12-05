@@ -145,10 +145,8 @@ Usage: ./file_encryptor.sh <encrypt|decrypt> <filename|folder>"
 
 # Test 4: Encrypt a valid file
 echo "Test file content" > testfile.txt
-test './file_encryptor.sh encrypt testfile.txt' 0 'password\npassword\n' \
-    "Encrypting file: testfile.txt
-File successfully encrypted: testfile.txt.enc
-Original file deleted: testfile.txt" ''
+test './file_encryptor.sh encrypt testfile.txt' 0 $'password\npassword\n' \
+$'Enter password:\nConfirm password:\nEncrypting file: testfile.txt\nFile successfully encrypted: testfile.txt.enc\nOriginal file deleted: testfile.txt'
 
 #Script 4: organize.sh
 
