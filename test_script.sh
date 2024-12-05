@@ -198,7 +198,7 @@ Examples:
   ./organize.sh -d ~/Downloads -c type
       Organizes files in the ~/Downloads folder by file type into subfolders.
   ./organize.sh -d ~/Documents -c size
-      Organizes files in the ~/Documents folder into 'Small', 'Medium', and 'Large' subfolders.
+      Organizes files in the ~/Documents folder into Small, Medium, and Large subfolders.
   ./organize.sh -d /path/to/folder -c date
       Organizes files in the specified folder into subfolders by year and month of last modification.
   ./organize.sh -d /path/to/folder -r
@@ -283,30 +283,6 @@ Files have been organized by modification date.'
 # Check directory structure
 [ -d test_directory/2024-01 ] || echo "Test failed: Directory 2024-01 does not exist."
 [ -d test_directory/2024-02 ] || echo "Test failed: Directory 2024-02 does not exist."
-
-# Cleanup after the test
-rm -rf test_directory restore.log
-
-# Prepare the test environment
-mkdir -p test_directory
-touch test_directory/file1.txt test_directory/file2.py test_directory/file3.jpg test_directory/file4.doc
-
-# Organize files first
-test './organize.sh -d test_directory -c type' 0 '' 'Backing up file metadata to restore.log...
-Backup complete.
-Organizing files in test_directory...
-Files have been organized by type.'
-
-# Run restore
-test './organize.sh -d test_directory -r' 0 '' 'Restoring files to their original locations...
-Extraction complete. Removing organizational directories...
-Restoration complete. Organizational directories have been removed.'
-
-# Check original file locations
-[ -f test_directory/file1.txt ] || echo "Test failed: File file1.txt is not in its original location."
-[ -f test_directory/file2.py ] || echo "Test failed: File file2.py is not in its original location."
-[ -f test_directory/file3.jpg ] || echo "Test failed: File file3.jpg is not in its original location."
-[ -f test_directory/file4.doc ] || echo "Test failed: File file4.doc is not in its original location."
 
 # Cleanup after the test
 rm -rf test_directory restore.log

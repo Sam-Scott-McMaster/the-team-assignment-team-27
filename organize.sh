@@ -52,7 +52,7 @@ help() {
     echo "      Organizes files in the ~/Downloads folder by file type into subfolders."
     echo ""
     echo "  $0 -d ~/Documents -c size"
-    echo "      Organizes files in the ~/Documents folder into 'Small', 'Medium', and 'Large' subfolders."
+    echo "      Organizes files in the ~/Documents folder into Small, Medium, and Large subfolders."
     echo ""
     echo "  $0 -d /path/to/folder -c date"
     echo "      Organizes files in the specified folder into subfolders by year and month of last modification."
