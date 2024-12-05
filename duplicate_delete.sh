@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# This utlitly deletes duplicate files in a specifc directory. 
+# The first instance of the duplicate file is kept and the rest are deleted.
+# Aakash Satish, McMaster University
+
 #check for correct number of arguments 
 if [[ $# -ne 1 ]]; then 
    echo "Invalid number of arguments" 
