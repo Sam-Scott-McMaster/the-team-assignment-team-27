@@ -178,10 +178,8 @@ test './file_encryptor.sh encrypt testfile.txt' 1 $'password1\npassword2\n' ' ' 
 
 # Test the --help option
 test './organize.sh --help' 0 '' 'Organize Script
-
 This script organizes files in a specified directory based on various criteria.
 It can also restore files to their original locations using a backup log.
-
 Usage:
   ./organize.sh -d <directory> -c <criteria>
       Organizes files in the specified directory based on the chosen criteria.
@@ -189,7 +187,6 @@ Usage:
       Restores files to their original locations using the restore log.
   ./organize.sh --help
       Displays this help message.
-
 Options:
   -d <directory>  Specify the target directory to organize or restore.
   -c <criteria>   Choose the organization criteria:
@@ -197,20 +194,15 @@ Options:
                    size  - Organize files by size (e.g., Small, Medium, Large).
                    date  - Organize files by modification date (e.g., Year-Month folders).
   -r              Restore files to their original locations using the restore log.
-
 Examples:
   ./organize.sh -d ~/Downloads -c type
       Organizes files in the ~/Downloads folder by file type into subfolders.
-
   ./organize.sh -d ~/Documents -c size
-      Organizes files in the ~/Documents folder into Small, Medium, and Large subfolders.
-
+      Organizes files in the ~/Documents folder into 'Small', 'Medium', and 'Large' subfolders.
   ./organize.sh -d /path/to/folder -c date
       Organizes files in the specified folder into subfolders by year and month of last modification.
-
   ./organize.sh -d /path/to/folder -r
       Restores files to their original locations using the restore log.
-
 Note:
   - The restore feature requires that a restore log (restore.log) exists and contains valid paths.
   - The specified directory must be the same as the one used during the organization step.'

@@ -286,10 +286,20 @@ while getopts "d:c:r" opt; do
     esac
 done
 
-# Validate arguments for restore mode
-if [ "$restore" == "1" ] && [ -z "$directory" ]; then
-    echo "Error: Directory must be specified with -d when using -r."
-    usage
+# Trigger restore mode if the -r flag is set
+if [ "$restore" == "1" ]; then
+    if [ -z "$directory" ]; then
+        echo "Error: Directory must be specified with -d when using -r."
+        usage
+    fi
+
+    if [ ! -d "$directory" ]; then
+        echo "Error: Specified directory '$directory' does not exist."
+        exit 1
+    fi
+
+    restore_files
+    exit 0
 fi
 
 # Ensure mandatory arguments are provided
@@ -308,12 +318,6 @@ if [[ "$criteria" != "type" && "$criteria" != "size" && "$criteria" != "date" ]]
     echo "Error: Invalid criteria '$criteria'."
     echo "Valid criteria are: type, size, date."
     exit 1
-fi
-
-# Perform restore if the restore flag is set
-if [ "$restore" == "1" ]; then
-    restore_files
-    exit 0
 fi
 
 # Backup metadata and start the recursive organization
