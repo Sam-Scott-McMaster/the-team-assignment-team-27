@@ -115,6 +115,16 @@ case "$first_input" in
         fi
         ./organize.sh -d "$second_input" -c "$3"
         ;;
+    backup)
+        if [[ $1 == "--help" ]]; then
+        ./backup.sh --help
+        fi
+        if [[ $# -ne 3 ]]; then
+            echo "Usage: ./backup.sh <backup folder or -na> <input .txt file>"
+            exit 1
+        fi
+        ./backup.sh "$second_input" "$3"
+        ;;
     *) #basically any other case
         echo "Command does not exist: $first_input"
         usage
