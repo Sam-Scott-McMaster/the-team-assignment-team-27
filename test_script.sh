@@ -207,6 +207,9 @@ Note:
   - The restore feature requires that a restore log (restore.log) exists and contains valid paths.
   - The specified directory must be the same as the one used during the organization step.'
 
+# Cleanup after the test
+rm -rf test_directory restore.log
+
 # Test missing directory argument
 test './organize.sh -c type' 1 '' 'Usage: ./organize.sh -d <directory> -c <criteria>
        ./organize.sh -d <directory> -r
@@ -214,12 +217,18 @@ test './organize.sh -c type' 1 '' 'Usage: ./organize.sh -d <directory> -c <crite
 
 Use --help to display detailed information about this script.'
 
+# Cleanup after the test
+rm -rf test_directory restore.log
+
 # Test missing criteria argument
 test './organize.sh -d test_directory' 1 '' 'Usage: ./organize.sh -d <directory> -c <criteria>
        ./organize.sh -d <directory> -r
        ./organize.sh --help
 
 Use --help to display detailed information about this script.'
+
+# Cleanup after the test
+rm -rf test_directory restore.log
 
 # Create test files
 mkdir -p test_directory
@@ -237,7 +246,11 @@ Files have been organized by type.'
 [ -d test_directory/Images ] || echo "Test failed: Directory Images does not exist."
 [ -d test_directory/Other ] || echo "Test failed: Directory Other does not exist."
 
+# Cleanup after the test
+rm -rf test_directory restore.log
+
 # Create files of different sizes
+mkdir -p test_directory
 dd if=/dev/zero of=test_directory/small_file bs=100 count=1
 dd if=/dev/zero of=test_directory/medium_file bs=1M count=5
 dd if=/dev/zero of=test_directory/large_file bs=1M count=15
@@ -253,7 +266,11 @@ Files have been organized by size.'
 [ -d test_directory/Medium ] || echo "Test failed: Directory Medium does not exist."
 [ -d test_directory/Large ] || echo "Test failed: Directory Large does not exist."
 
+# Cleanup after the test
+rm -rf test_directory restore.log
+
 # Create files with specific modification dates
+mkdir -p test_directory
 touch -t 202401010000 test_directory/file_jan.txt
 touch -t 202402010000 test_directory/file_feb.txt
 
@@ -267,6 +284,13 @@ Files have been organized by modification date.'
 [ -d test_directory/2024-01 ] || echo "Test failed: Directory 2024-01 does not exist."
 [ -d test_directory/2024-02 ] || echo "Test failed: Directory 2024-02 does not exist."
 
+# Cleanup after the test
+rm -rf test_directory restore.log
+
+# Prepare the test environment
+mkdir -p test_directory
+touch test_directory/file1.txt test_directory/file2.py test_directory/file3.jpg test_directory/file4.doc
+
 # Organize files first
 test './organize.sh -d test_directory -c type' 0 '' 'Backing up file metadata to restore.log...
 Backup complete.
@@ -275,7 +299,7 @@ Files have been organized by type.'
 
 # Run restore
 test './organize.sh -d test_directory -r' 0 '' 'Restoring files to their original locations...
-Extracting complete. Removing organizational directories...
+Extraction complete. Removing organizational directories...
 Restoration complete. Organizational directories have been removed.'
 
 # Check original file locations
@@ -284,12 +308,21 @@ Restoration complete. Organizational directories have been removed.'
 [ -f test_directory/file3.jpg ] || echo "Test failed: File file3.jpg is not in its original location."
 [ -f test_directory/file4.doc ] || echo "Test failed: File file4.doc is not in its original location."
 
+# Cleanup after the test
+rm -rf test_directory restore.log
+
 # Invalid directory
 test './organize.sh -d nonexistent_directory -c type' 1 '' 'Error: Specified directory '\''nonexistent_directory'\'' does not exist.'
+
+# Cleanup after the test
+rm -rf test_directory restore.log
 
 # Invalid criteria
 test './organize.sh -d test_directory -c invalid' 1 '' 'Error: Invalid criteria '\''invalid'\''.
 Valid criteria are: type, size, date.'
+
+# Cleanup after the test
+rm -rf test_directory restore.log
 
 #Script 5: backup.sh and backup2.sh
 
