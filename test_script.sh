@@ -241,7 +241,7 @@ dd if=/dev/zero of=test_directory/large_file bs=1M count=15
 # Run the script
 test './organize.sh -d test_directory -c size' 0 '' 'Backing up file metadata to restore.log...
 Backup complete.
-Organizing files...
+Organizing files in test_directory...
 Files have been organized by size.'
 
 # Check directory structure
@@ -284,7 +284,8 @@ Restoration complete. Organizational directories have been removed.'
 test './organize.sh -d nonexistent_directory -c type' 1 '' 'Error: Specified directory '\''nonexistent_directory'\'' does not exist.'
 
 # Invalid criteria
-test './organize.sh -d test_directory -c invalid' 1 '' 'Invalid criteria'
+test './organize.sh -d test_directory -c invalid' 1 '' 'Error: Invalid criteria '\''invalid'\''.
+Valid criteria are: type, size, date.'
 
 #Script 5: backup.sh and backup2.sh
 

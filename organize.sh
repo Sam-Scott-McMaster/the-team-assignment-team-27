@@ -64,6 +64,8 @@ help() {
     echo "  - The restore feature requires that a restore log ($LOG_FILE) exists and contains valid paths."
     echo "  - The specified directory must be the same as the one used during the organization step."
     echo ""
+
+    exit 0  # Ensure successful exit
 }
 
 # Parse options and arguments
@@ -234,12 +236,19 @@ organize_recursive() {
     local target_dir="$1"
     local criteria="$2"
 
-    echo "Organizing files..."
+    echo "Organizing files in $target_dir..."
 
-    # Iterate over all files and directories in the target directory
+    # Call the appropriate organization function for the current directory
+    case "$criteria" in
+        type) organize_by_type "$target_dir" ;;
+        size) organize_by_size "$target_dir" ;;
+        date) organize_by_date "$target_dir" ;;
+        *) echo "Invalid criteria"; usage ;;
+    esac
+
+    # Recurse into subdirectories
     for entry in "$target_dir"/*; do
         if [ -d "$entry" ]; then
-            # Skip directories created during organization
             case "$criteria" in
                 type) 
                     if [[ "$entry" =~ (Images|Documents|Code|Other)$ ]]; then
@@ -257,21 +266,11 @@ organize_recursive() {
                     fi
                     ;;
             esac
-            # Recurse into subdirectories
             organize_recursive "$entry" "$criteria"
-        elif [ -f "$entry" ]; then
-            # Call the appropriate organization function based on the criteria
-            case "$criteria" in
-                type) organize_by_type "$target_dir" ;;
-                size) organize_by_size "$target_dir" ;;
-                date) organize_by_date "$target_dir" ;;
-                *) echo "Invalid criteria"; usage ;;
-            esac
-            break
         fi
     done
 
-    # Display a success message based on the chosen criteria
+    # Display success message once per directory
     case "$criteria" in
         type) echo "Files have been organized by type." ;;
         size) echo "Files have been organized by size." ;;
@@ -283,6 +282,24 @@ organize_recursive() {
 if [[ "$1" == "--help" ]]; then
     help
     exit 0
+fi
+
+# Ensure mandatory arguments are provided
+if [ -z "$directory" ] || [ -z "$criteria" ]; then
+    usage
+fi
+
+# Validate the directory exists
+if [ ! -d "$directory" ]; then
+    echo "Error: Specified directory '$directory' does not exist."
+    exit 1
+fi
+
+# Validate criteria input
+if [[ "$criteria" != "type" && "$criteria" != "size" && "$criteria" != "date" ]]; then
+    echo "Error: Invalid criteria '$criteria'."
+    echo "Valid criteria are: type, size, date."
+    exit 1
 fi
 
 # Perform restore if the restore flag is set
